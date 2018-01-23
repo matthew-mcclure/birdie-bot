@@ -1,4 +1,5 @@
 const bodyParser = require('body-parser')
+const http = require('http')
 const Message = require('./models/message-schema')
 const methodOverride = require('method-override')
 const mongodbUriString = process.env.MONGODB_URI || 'mongodb://localhost/birdie-bot';
@@ -8,6 +9,11 @@ const routes = require('./routes')
 
 const express = require('express')
 const app = express()
+
+
+setInterval(function() {
+    http.get("http://birdie-bot.herokuapp.com/healthcheck");
+}, 300000); // every 5 minutes (300000)
 
 Array.prototype.randomElement = function () {
     return this[Math.floor(Math.random() * this.length)]
