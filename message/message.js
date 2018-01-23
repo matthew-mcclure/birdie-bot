@@ -28,8 +28,8 @@ function get (req, res, next) {
 
         let query = {}
         
-        if (req.query.subType) query.subType = req.query.subType
-        if (req.query.type) query.type = req.query.type
+        query.subType = req.query.subType ? req.query.subType : {$ne: 'introduction'}
+        query.type = req.query.type ? req.query.type : {$ne: 'introduction'}
 
         Message.aggregate([{$match: query}, { $sample: {size: 1} }],
             (err, result) => {
