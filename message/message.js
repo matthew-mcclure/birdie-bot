@@ -6,7 +6,14 @@ const twilio = require('twilio')
 
 let sid = process.env.TWILIO_SID || config.twilio.sid
 let token = process.env.TWILIO_TOKEN || config.twilio.token
-let twilioNumber = process.env.TWILIO_NUMBER || config.twilio.number
+let twilioNumber = process.env.TWILIO_NUMBER || config.twilio.twilioNumber
+
+let twilioPrefix = ['beep. boop. incoming transmission...',
+                    'whrrrr...\nloading feelings...',
+                    'importing package: love 100/100%... ',
+                    'scanning all ports for wifey...\nlocation retreived...',
+                    'cannot read property "negative" of wifey.\npolyfill "negative" with "love".',
+                    ]
  
 module.exports = {
     get,
@@ -26,17 +33,19 @@ function get (req, res, next) {
 
         Message.aggregate([{$match: query}, { $sample: {size: 1} }],
             (err, result) => {
+                let record = result[0]
                 
-                let message = result[0] ? result[0].text : '<3'
-                let prefix = config.twilio.twilioPrefix.randomElement()
-                let textBody = `${prefix} ${message}`
+                let message = record ? record.text : '<3'
+                let prefix = twilioPrefix.randomElement()
+                let textBody = `${prefix}\n...\n...\n\n${message}`
 
-                // Send the text message.
-                client.messages.create({
-                    to: recipient,
-                    from: twilioNumber,
+                let twilioMessage = {
                     body: textBody,
-                });
+                    from: twilioNumber,
+                    to: recipient,
+                }
+
+                client.messages.create(twilioMessage)
                 res.send(textBody)
             }
         )
