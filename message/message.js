@@ -1,5 +1,5 @@
 require('mongoose')
-const config = require('../config')
+// const config = require('../config')
 const express = require('express')
 const Message = require('../models/message-schema')
 const twilio = require('twilio')
