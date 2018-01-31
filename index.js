@@ -26,9 +26,9 @@ function sendMessageCheck() {
     if (hour >= 8 && hour <= 16)
         return false
 
-    // If random number is 123, send the message
-    let randInt = Math.floor(Math.random() * Math.floor(123))
-    if (randInt == 123)
+    // If random number is 99, send the message
+    let randInt = Math.floor(Math.random() * Math.floor(100))
+    if (randInt == 99)
         return true
     else
         return false
