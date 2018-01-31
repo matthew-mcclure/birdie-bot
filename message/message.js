@@ -33,7 +33,14 @@ function getPrefix (req, res, next) {
 
         Prefix.aggregate([{$match: query}, { $sample: {size: 2} }],
             (err, result) => {
-                req.query.prefix = result[0].text < result[1].text ? result[0].text : result[1].text
+                // select the less used of the results
+                let selectedPrefix = result[0].usageCount < result[1].usageCount ? result[0] : result[1]
+                req.query.prefix = selectedPrefix.text
+
+                // update the prefix usageCount
+                Prefix.update({_id: selectedPrefix._id}, {$inc: {usageCount: 1}}).exec()
+
+                // move on to find text body
                 next()
             }
         )
@@ -51,7 +58,14 @@ function getTextBody (req, res, next) {
 
         Message.aggregate([{$match: query}, { $sample: {size: 2} }],
             (err, result) => {
-                req.query.textBody = result[0].text < result[1].text ? result[0].text : result[1].text
+                // select the less used of the results
+                let selectedTextBody = result[0].usageCount < result[1].usageCount ? result[0] : result[1]
+                req.query.textBody = selectedTextBody.text
+
+                // update the prefix usageCount
+                Message.update({_id: selectedTextBody._id}, {$inc: {usageCount: 1}}).exec()
+
+                // move on to send message
                 next()
             }
         )
