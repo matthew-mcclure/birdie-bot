@@ -12,11 +12,26 @@ const app = express()
 
 
 setInterval(function() {
-    http.get("http://birdie-bot.herokuapp.com/healthcheck");
-}, 300000); // every 5 minutes (300000)
+    if (sendMessageCheck()) {
+        http.get('http://birdie-bot.herokuapp.com/message/?recipientNumber=5025944499')
+    } else {
+        http.get('http://birdie-bot.herokuapp.com/healthcheck')
+    }
+}, 300000)
 
-Array.prototype.randomElement = function () {
-    return this[Math.floor(Math.random() * this.length)]
+function sendMessageCheck() {
+    // Check if hours are outside when it should be sent
+    let now = new Date()
+    let hour = now.getUTCHours
+    if (hour >= 8 && hour <= 16)
+        return false
+
+    // If random number is 123, send the message
+    let randInt = Math.floor(Math.random() * Math.floor(123))
+    if (randInt == 123)
+        return true
+    else
+        return false
 }
 
 mongoose.Promise = global.Promise
