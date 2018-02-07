@@ -22,7 +22,7 @@ setInterval(function() {
 function sendMessageCheck() {
     // Check if hours are outside when it should be sent
     let now = new Date()
-    let hour = now.getUTCHours
+    let hour = now.getUTCHours()
     if (hour >= 8 && hour <= 16)
         return false
 
