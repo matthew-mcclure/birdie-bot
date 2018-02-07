@@ -10,10 +10,18 @@ const routes = require('./routes')
 const express = require('express')
 const app = express()
 
+// config file is only present for local testing
+let config
+try {
+    config = require('../config')
+} catch (err) {
+    console.log('whooper doop. scanning environmental variables...')
+}
+
 
 setInterval(function() {
     if (sendMessageCheck()) {
-        http.get('http://birdie-bot.herokuapp.com/message/?recipientNumber=5025944499')
+        http.get(`http://birdie-bot.herokuapp.com/message/?recipientNumber=${process.env.DEFAULT_NUMBER || config.defaultNumber}`)
     } else {
         http.get('http://birdie-bot.herokuapp.com/healthcheck')
     }
