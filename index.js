@@ -1,6 +1,5 @@
 const bodyParser = require('body-parser')
 const http = require('http')
-const Message = require('./models/message-schema')
 const methodOverride = require('method-override')
 const mongodbUriString = process.env.MONGODB_URI || 'mongodb://localhost/birdie-bot';
 const mongoose = require('mongoose')
@@ -31,15 +30,11 @@ function sendMessageCheck() {
     // Check if hours are outside when it should be sent
     let now = new Date()
     let hour = now.getUTCHours()
-    if (hour >= 8 && hour <= 16)
-        return false
+    if(hour >= 6 && hour <= 17) return false
 
     // If random number is 99, send the message
     let randInt = Math.floor(Math.random() * Math.floor(100))
-    if (randInt == 99)
-        return true
-    else
-        return false
+    return randInt == 99
 }
 
 mongoose.Promise = global.Promise
